@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link, redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logoImg from '../images/logo.png';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
@@ -29,7 +29,9 @@ const NavLogo = styled.div`
 const NavTitle = styled.div`
   display: flex;
   justify-content: center;
-  color: white;
+  background: linear-gradient(to right, #ffffff, #051eff2e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   flex: 40%;
   font-family: Arial, Helvetica, sans-serif;
   font-style: normal;
@@ -71,6 +73,7 @@ const NavSideBar = styled.div`
 `;
 const NavMobileBar = styled.div`
   display: none;
+  transition: 0.5s;
   @media (max-width: 700px) {
     display: flex;
     cursor: pointer;
@@ -84,10 +87,20 @@ const NavMobileSideBar = styled.div<{ isAppear: boolean }>`
   width: 100vw;
   position: fixed;
   overflow: hidden;
-
+  transition: 0.5s;
+  animation: fadein 1s;
   a {
     text-decoration: none;
     color: white;
+  }
+  @keyframes fadein {
+    from {
+      opacity: 0;
+      transform: translateX(-30%);
+    }
+    to {
+      opacity: 1;
+    }
   }
 `;
 const NavInner = styled.div`
@@ -97,14 +110,17 @@ const NavInner = styled.div`
   justify-content: space-between;
   height: 90vh;
   font-size: 55px;
+  transition: 0.5s;
 `;
 const NavCloseBtn = styled.div`
   position: relative;
   cursor: pointer;
+  transition: 0.5s;
 `;
 
 export default function NavBar() {
   const [isAppear, setIsAppear] = useState(false);
+
   return (
     <div>
       <NavMobileSideBar isAppear={isAppear}>
@@ -138,7 +154,7 @@ export default function NavBar() {
           </Link>
         </NavLogo>
         <NavTitle>
-          <span>행복해지는 습관</span>
+          <span>하루 살이</span>
         </NavTitle>
         <NavSideBar>
           <Link to="/">Home</Link>
@@ -150,7 +166,9 @@ export default function NavBar() {
           <AiOutlineMenu
             size={40}
             color="white"
-            onClick={() => setIsAppear(!isAppear)}
+            onClick={() => {
+              setIsAppear(!isAppear);
+            }}
           />
         </NavMobileBar>
       </NavContainer>
