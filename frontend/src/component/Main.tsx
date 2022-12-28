@@ -76,7 +76,8 @@ const InnerBox2 = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-
+  text-align: center;
+  font-size: 2rem;
   img {
     width: 200px;
     height: 200px;
@@ -117,11 +118,29 @@ const InnerBox3 = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
-
+  font-size: 2rem;
   img {
     width: 200px;
     height: 200px;
+  }
+  .hidden {
+    opacity: 0;
+  }
+  .show {
+    :nth-child(1) {
+      opacity: 1;
+      transform: translateX(-50px);
+      transition: 2s;
+      transition-delay: 1s;
+    }
+    :nth-child(2) {
+      opacity: 1;
+      transform: translateX(50px);
+      transition: 2s;
+      transition-delay: 2s;
+    }
   }
 `;
 const InnerBox4 = styled.div`
@@ -129,11 +148,86 @@ const InnerBox4 = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-
+  .item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .hidden {
+    opacity: 0;
+  }
   img {
     width: 200px;
     height: 200px;
+    margin-bottom: 50px;
   }
+
+  .show {
+    :nth-child(1) {
+      opacity: 1;
+      transform: rotate3d(-30deg, 30deg, 20deg, 10deg);
+      transition: 2s;
+      transition-delay: 1s;
+    }
+    :nth-child(2) {
+      opacity: 1;
+
+      transition: 2s;
+      transition-delay: 2s;
+    }
+    :nth-child(3) {
+      opacity: 1;
+
+      transform: rotate3d(1, 1, 1, 0deg);
+
+      transition: 2s;
+      transition-delay: 2s;
+    }
+  }
+`;
+const Button = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+
+  height: 160px;
+  width: 500px;
+
+  /* Gray/Gray700 */
+
+  background: #ff882c;
+  border-radius: 24px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 1;
+  flex-grow: 1;
+  height: 60px;
+
+  /* Bold/T5 */
+
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 60px;
+  /* identical to box height, or 125% */
+
+  letter-spacing: -0.025em;
+
+  /* Font/700 */
+
+  color: #fff;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 `;
 
 export default function Main() {
@@ -142,14 +236,22 @@ export default function Main() {
     (entries: any) => {
       entries.forEach((entry: any) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("show");
+          entry.target.children[0].classList.add("show");
+          entry.target.children[1].classList.add("show");
+          entry.target.children[2].classList.add("show");
+          entry.target.children[3].classList.add("show");
+          entry.target.children[4].classList.add("show");
+
+          // for(let i=0; i<5; i++) {
+          //   entry.target.children.[i].classList.add('show')
+          // }
         }
       });
     },
     { threshold: 0.5 },
   );
   useEffect(() => {
-    const hiddenElements = document.querySelectorAll(".hidden");
+    const hiddenElements = document.querySelectorAll(".item");
     hiddenElements.forEach(el => observer.observe(el));
   }, []);
 
@@ -169,7 +271,7 @@ export default function Main() {
         </InnerBox1>
         <div ref={element}>
           <InnerBox2>
-            <div className="scroll-reveal">
+            <div className="item">
               <h1 className="hidden">많이 힘드셨죠?</h1>
               <img src={sadImg1} className="hidden" alt="로딩중" />
               <img src={sadImg2} className="hidden" alt="로딩중" />
@@ -180,12 +282,17 @@ export default function Main() {
         </div>
 
         <InnerBox3>
-          <h1>제가 위로해 드릴게요</h1>
-          <img src={careImg} alt="로딩중" />
+          <div className="item">
+            <h1 className="hidden">제가 위로해 드릴게요</h1>
+            <img className="hidden" src={careImg} alt="로딩중" />
+          </div>
         </InnerBox3>
         <InnerBox4>
-          <h1>행복을 만드는 습관.. 시작해 볼까요?</h1>
-          <img src={happyImg} alt="로딩중" />
+          <div className="item">
+            <h1 className="hidden">행복을 만드는 습관.. 시작해 볼까요?</h1>
+            <img className="hidden" src={happyImg} alt="로딩중" />
+            <Button className="hidden">시작하기</Button>
+          </div>
         </InnerBox4>
       </Container>
     </div>
