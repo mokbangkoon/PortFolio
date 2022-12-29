@@ -78,6 +78,14 @@ const InnerBox2 = styled.div`
   height: 100vh;
   text-align: center;
   font-size: 2rem;
+  flex-direction: column;
+  .down-arrow {
+    align-items: center;
+    color: pink;
+    animation: fadeItem3 1.5s infinite ease-in-out;
+    padding-top: 50px;
+    font-size: 100px;
+  }
   img {
     width: 200px;
     height: 200px;
@@ -121,9 +129,10 @@ const InnerBox3 = styled.div`
   flex-direction: column;
   height: 100vh;
   font-size: 2rem;
+
   img {
-    width: 200px;
-    height: 200px;
+    width: 400px;
+    height: 400px;
   }
   .hidden {
     opacity: 0;
@@ -137,17 +146,24 @@ const InnerBox3 = styled.div`
     }
     :nth-child(2) {
       opacity: 1;
-      transform: translateX(50px);
+      transform: translateX(300px);
       transition: 2s;
       transition-delay: 2s;
     }
   }
+  .down-arrow {
+    color: pink;
+    animation: fadeItem3 1.5s infinite ease-in-out;
+    padding-top: 50px;
+    font-size: 100px;
+  }
 `;
-const InnerBox4 = styled.div`
+const InnerBox4 = styled.div<{ delay: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+
+  height: calc(85vh);
   .item {
     display: flex;
     flex-direction: column;
@@ -166,23 +182,34 @@ const InnerBox4 = styled.div`
   .show {
     :nth-child(1) {
       opacity: 1;
-      transform: rotate3d(-30deg, 30deg, 20deg, 10deg);
       transition: 2s;
       transition-delay: 1s;
     }
     :nth-child(2) {
       opacity: 1;
-
+      transform: rotate3d(2, 2, 2, 15deg);
       transition: 2s;
       transition-delay: 2s;
     }
     :nth-child(3) {
       opacity: 1;
-
       transform: rotate3d(1, 1, 1, 0deg);
-
       transition: 2s;
-      transition-delay: 2s;
+      ${({ delay }) => {
+        if (delay) {
+          return " transition-delay: 0s;";
+        } else {
+          return "transition-delay: 3s;";
+        }
+      }}
+
+      :hover {
+        cursor: pointer;
+        background-color: black !important;
+        transition-delay: 0s !important;
+        box-shadow: 5px 10px 10px 10px #ebecf0;
+        transition: 0.3s;
+      }
     }
   }
 `;
@@ -192,7 +219,6 @@ const Button = styled.div`
   justify-content: center;
   align-items: center;
   padding: 12px;
-
   height: 160px;
   width: 500px;
 
@@ -231,20 +257,22 @@ const Button = styled.div`
 `;
 
 export default function Main() {
-  const element = useRef<HTMLDivElement>(null);
+  const [delay, setDelay] = useState(false);
+
+  const element = useRef<null[] | HTMLDivElement[]>([]);
   const observer = new IntersectionObserver(
     (entries: any) => {
       entries.forEach((entry: any) => {
         if (entry.isIntersecting) {
-          entry.target.children[0].classList.add("show");
-          entry.target.children[1].classList.add("show");
-          entry.target.children[2].classList.add("show");
-          entry.target.children[3].classList.add("show");
-          entry.target.children[4].classList.add("show");
+          // entry.target.children[0].classList.add("show");
+          // entry.target.children[1].classList.add("show");
+          // entry.target.children[2].classList.add("show");
+          // entry.target.children[3].classList.add("show");
+          // entry.target.children[4].classList.add("show");
 
-          // for(let i=0; i<5; i++) {
-          //   entry.target.children.[i].classList.add('show')
-          // }
+          for (let i = 0; i < entry.target.children.length; i++) {
+            entry.target?.children?.[i].classList.add("show");
+          }
         }
       });
     },
@@ -255,21 +283,26 @@ export default function Main() {
     hiddenElements.forEach(el => observer.observe(el));
   }, []);
 
-  const clickedDownArrow = () => {
-    element.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  const clickedDownArrow = (n: number) => {
+    element?.current[n]?.scrollIntoView({ behavior: "smooth", block: "end" });
   };
+
   return (
     <div>
       <Container>
         <InnerBox1>
-          <div>오늘 하루 어떠셨나요?</div>
+          <div>오늘 하루 어떠셨나요? </div>
           <div>아래로 내려보세요 !</div>
           <BsFillArrowDownCircleFill
-            onClick={clickedDownArrow}
+            onClick={() => clickedDownArrow(0)}
             className="down-arrow"
           />
         </InnerBox1>
-        <div ref={element}>
+        <div
+          ref={el => {
+            element.current[0] = el;
+          }}
+        >
           <InnerBox2>
             <div className="item">
               <h1 className="hidden">많이 힘드셨죠?</h1>
@@ -278,22 +311,44 @@ export default function Main() {
               <img src={sadImg3} className="hidden" alt="로딩중" />
               <img src={sadImg4} className="hidden" alt="로딩중" />
             </div>
+
+            <BsFillArrowDownCircleFill
+              onClick={() => clickedDownArrow(1)}
+              className="down-arrow"
+            />
           </InnerBox2>
         </div>
-
-        <InnerBox3>
-          <div className="item">
-            <h1 className="hidden">제가 위로해 드릴게요</h1>
-            <img className="hidden" src={careImg} alt="로딩중" />
-          </div>
-        </InnerBox3>
-        <InnerBox4>
-          <div className="item">
-            <h1 className="hidden">행복을 만드는 습관.. 시작해 볼까요?</h1>
-            <img className="hidden" src={happyImg} alt="로딩중" />
-            <Button className="hidden">시작하기</Button>
-          </div>
-        </InnerBox4>
+        <div
+          ref={el => {
+            element.current[1] = el;
+          }}
+        >
+          <InnerBox3>
+            <div className="item">
+              <h1 className="hidden">제가 위로해 드릴게요</h1>
+              <img className="hidden" src={careImg} alt="로딩중" />
+            </div>
+            <BsFillArrowDownCircleFill
+              onClick={() => clickedDownArrow(2)}
+              className="down-arrow"
+            />
+          </InnerBox3>
+        </div>
+        <div
+          ref={el => {
+            element.current[2] = el;
+          }}
+        >
+          <InnerBox4 delay={delay}>
+            <div className="item">
+              <h1 className="hidden">행복을 만드는 습관.. 시작해 볼까요?</h1>
+              <img className="hidden" src={happyImg} alt="로딩중" />
+              <Button className="hidden" onMouseOver={() => setDelay(true)}>
+                시작하기
+              </Button>
+            </div>
+          </InnerBox4>
+        </div>
       </Container>
     </div>
   );

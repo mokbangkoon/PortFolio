@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import logoImg from '../images/logo.png';
-import { AiOutlineMenu } from 'react-icons/ai';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
-import { useState } from 'react';
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import logoImg from "../images/logo.png";
+import { AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useState } from "react";
 
 const NavContainer = styled.div`
   display: flex;
@@ -80,7 +80,7 @@ const NavMobileBar = styled.div`
   }
 `;
 const NavMobileSideBar = styled.div<{ isAppear: boolean }>`
-  display: ${props => (props.isAppear ? '' : 'none')};
+  display: ${props => (props.isAppear ? "" : "none")};
 
   background-color: black;
   height: 100vh;
