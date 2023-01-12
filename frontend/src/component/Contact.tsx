@@ -1,12 +1,13 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 const Container = styled.div`
-  color: red;
+  color: violet;
+  font-size: 3rem;
 `;
 export default function Contact() {
   return (
     <div>
       <Container>
-        <div>컨텍</div>
+        <div>www.github.com</div>
       </Container>
     </div>
   );
